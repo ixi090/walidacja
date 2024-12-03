@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formularz Rezerwacji</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+        }
+
+        legend {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .submit {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .submit:hover {
+            background-color: #0056b3;
+        }
+
+        #newsleter {
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#oneform").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 2
+                    },
+                    lastname: {
+                        required: true,
+                        minlength: 2
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    URL: {
+                        required: true,
+                        url: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    spassword: {
+                        required: true,
+                        equalTo: "#cpassword"
+                    },
+                    "topic[]": {
+                        required: true,
+                        minlength: 2
+                    },
+                    checkbox: {
+                        required: true
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "Proszę podać imię",
+                        minlength: "Imię musi mieć co najmniej 2 znaki"
+                    },
+                    lastname: {
+                        required: "Proszę podać nazwisko",
+                        minlength: "Nazwisko musi mieć co najmniej 2 znaki"
+                    },
+                    email: {
+                        required: "Proszę podać e-mail",
+                        email: "Proszę podać poprawny adres e-mail"
+                    },
+                    URL: {
+                        required: "Proszę podać URL",
+                        url: "Proszę podać poprawny adres URL"
+                    },
+                    password: {
+                        required: "Proszę podać hasło",
+                        minlength: "Hasło musi mieć co najmniej 5 znaków"
+                    },
+                    spassword: {
+                        required: "Proszę powtórzyć hasło",
+                        equalTo: "Hasła muszą być identyczne"
+                    },
+                    "topic[]": {
+                        required: "Wybierz co najmniej 2 tematy",
+                        minlength: "Wybierz co najmniej 2 tematy"
+                    },
+                    checkbox: {
+                        required: "Musisz zaakceptować politykę"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function (error, element) {
+                    error.addClass("error");
+                    error.insertAfter(element);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="oneform" method="get" action="index.html" autocomplete="off">
+        <fieldset>
+            <legend>Rezerwacja</legend>
+            <p>
+                <label for="firstname">Imię:</label>
+                <input id="firstname" name="name" minlength="2" type="text" required>
+            </p>
+            <p>
+                <label for="lastname">Nazwisko:</label>
+                <input id="lastname" name="lastname" type="text" required>
+            </p>
+            <p>
+                <label for="cemail">E-Mail:</label>
+                <input id="cemail" name="email" type="email" required>
+            </p>
+            <p>
+                <label for="cUrl">URL (link do własnej strony):</label>
+                <input id="cUrl" name="URL" type="url" required>
+            </p>
+            <p>
+                <label for="cpassword">Hasło:</label>
+                <input id="cpassword" name="password" type="password" required>
+            </p>
+            <p>
+                <label for="cspassword">Powtórz hasło:</label>
+                <input id="cspassword" name="spassword" type="password" required>
+            </p>
+            <p>
+                <label for="agree">Akceptuję politykę:</label>
+                <input id="agree" name="checkbox" type="checkbox" required>
+            </p>
+            <fieldset id="newsleter">
+                <legend>Tematy (co najmniej 2):</legend>
+                <label for="newtechnology">
+                    <input type="checkbox" id="newtechnology" value="Najnowsze technologie" name="topic[]"> Najnowsze technologie
+                </label>
+                <label for="computercomponents">
+                    <input type="checkbox" id="computercomponents" value="Budowa komputerów" name="topic[]"> Budowa komputerów
+                </label>
+                <label for="games">
+                    <input type="checkbox" id="games" value="Tworzenie gier" name="topic[]"> Tworzenie gier
+                </label>
+                <label for="web">
+                    <input type="checkbox" id="web" value="Tworzenie stron" name="topic[]"> Tworzenie stron
+                </label>
+            </fieldset>
+            <p>
+                <input type="submit" class="submit" value="Zarezerwuj">
+            </p>
+        </fieldset>
+    </form>
+</body>
+</html>
