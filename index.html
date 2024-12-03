@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formularz Rezerwacji</title>
+    <title>Walidacja</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
     <style>
@@ -164,7 +164,7 @@
 <body>
     <form id="oneform" method="get" action="index.html" autocomplete="off">
         <fieldset>
-            <legend>Rezerwacja</legend>
+            <legend>Formularz(taki se)</legend>
             <p>
                 <label for="firstname">Imię:</label>
                 <input id="firstname" name="name" minlength="2" type="text" required>
@@ -178,16 +178,12 @@
                 <input id="cemail" name="email" type="email" required>
             </p>
             <p>
-                <label for="cUrl">URL (link do własnej strony):</label>
+                <label for="cUrl">URL:</label>
                 <input id="cUrl" name="URL" type="url" required>
             </p>
             <p>
                 <label for="cpassword">Hasło:</label>
                 <input id="cpassword" name="password" type="password" required>
-            </p>
-            <p>
-                <label for="cspassword">Powtórz hasło:</label>
-                <input id="cspassword" name="spassword" type="password" required>
             </p>
             <p>
                 <label for="agree">Akceptuję politykę:</label>
