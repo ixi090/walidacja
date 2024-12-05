@@ -1,212 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walidacja</title>
+    <title>Rejestracja - Walidacja</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
+            margin: 20px;
+            background-color: #eef7fc;
         }
-
         form {
             max-width: 600px;
-            margin: 50px auto;
+            margin: 0 auto;
+            background: #fff;
             padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-
-        fieldset {
-            border: none;
-            padding: 0;
-        }
-
         legend {
-            font-size: 1.5rem;
+            font-size: 1.5em;
+            font-weight: bold;
             color: #333;
             margin-bottom: 15px;
         }
-
-        p {
+        .form-group {
+            display: flex;
+            align-items: center;
             margin-bottom: 15px;
         }
-
         label {
-            display: block;
+            flex: 0 0 150px;
             font-weight: bold;
-            margin-bottom: 5px;
+            color: #555;
         }
-
         input[type="text"],
+        input[type="password"],
         input[type="email"],
-        input[type="url"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
+        input[type="tel"],
+        textarea {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-
+        textarea {
+            resize: vertical;
+        }
         input[type="checkbox"] {
             margin-right: 10px;
         }
-
-        .submit {
-            background-color: #007BFF;
+        input[type="submit"] {
+            background-color: #03a9f4;
             color: white;
-            padding: 10px 15px;
+            font-weight: bold;
             border: none;
-            border-radius: 5px;
+            padding: 10px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1rem;
         }
-
-        .submit:hover {
-            background-color: #0056b3;
+        input[type="submit"]:hover {
+            background-color: #009ae1;
         }
-
-        #newsleter {
-            margin-top: 20px;
-        }
-
         .error {
             color: red;
-            font-size: 0.9rem;
-            margin-top: 5px;
+            font-size: 0.9em;
+            font-style: italic;
         }
     </style>
     <script>
         $(document).ready(function () {
-            $("#oneform").validate({
+
+            $.validator.addMethod("capitalized", function (value, element) {
+                return this.optional(element) || /^[A-ZĄĆĘŁŃÓŚŻŹ][a-ząćęłńóśżź]+$/.test(value);
+            }, "Pole musi zaczynać się dużą literą.");
+            
+
+            $.validator.addMethod("strongPassword", function (value, element) {
+                return this.optional(element) || /[A-Z]/.test(value) && /\d/.test(value);
+            }, "Hasło musi zawierać co najmniej jedną dużą literę i jedną cyfrę.");
+            
+
+            $.validator.addMethod("gmail", function (value, element) {
+                return this.optional(element) || /^[a-zA-Z0-9._-]+@gmail\.com$/.test(value);
+            }, "Adres e-mail musi być zakończony na @gmail.com.");
+            
+
+            $.validator.addMethod("phone", function (value, element) {
+                return this.optional(element) || /^[0-9]{9}$/.test(value);
+            }, "Numer telefonu musi zawierać dokładnie 9 cyfr.");
+            
+
+            $.validator.addMethod("minLengthComment", function (value, element) {
+                return this.optional(element) || value.length >= 30;
+            }, "comment musi mieć co najmniej 30 znaków.");
+            
+            $("#signupForm").validate({
                 rules: {
-                    name: {
+                    firstname: {
                         required: true,
-                        minlength: 2
+                        minlength: 2,
+                        capitalized: true
                     },
                     lastname: {
                         required: true,
-                        minlength: 2
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    URL: {
-                        required: true,
-                        url: true
+                        minlength: 3,
+                        capitalized: true
                     },
                     password: {
                         required: true,
-                        minlength: 5
+                        minlength: 5,
+                        strongPassword: true
                     },
-                    spassword: {
+                    confirm_password: {
                         required: true,
-                        equalTo: "#cpassword"
+                        minlength: 5,
+                        equalTo: "#password"
                     },
-                    "topic[]": {
+                    email: {
                         required: true,
-                        minlength: 2
+                        email: true,
+                        gmail: true
                     },
-                    checkbox: {
-                        required: true
-                    }
+                    phone: {
+                        required: true,
+                        phone: true
+                    },
+                    comment: {
+                        required: false,
+                        minLengthComment: true
+                    },
+                    agree: "required"
                 },
                 messages: {
-                    name: {
-                        required: "Proszę podać imię",
-                        minlength: "Imię musi mieć co najmniej 2 znaki"
+                    firstname: {
+                        required: "To pole jest wymagane.",
+                        minlength: "Imię musi mieć co najmniej 2 znaki."
                     },
                     lastname: {
-                        required: "Proszę podać nazwisko",
-                        minlength: "Nazwisko musi mieć co najmniej 2 znaki"
-                    },
-                    email: {
-                        required: "Proszę podać e-mail",
-                        email: "Proszę podać poprawny adres e-mail"
-                    },
-                    URL: {
-                        required: "Proszę podać URL",
-                        url: "Proszę podać poprawny adres URL"
+                        required: "To pole jest wymagane.",
+                        minlength: "Nazwisko musi mieć co najmniej 3 znaki."
                     },
                     password: {
-                        required: "Proszę podać hasło",
-                        minlength: "Hasło musi mieć co najmniej 5 znaków"
+                        required: "Proszę podać hasło.",
+                        minlength: "Hasło musi zawierać co najmniej 5 znaków.",
+                        strongPassword: "Hasło musi zawierać co najmniej jedną dużą literę i jedną cyfrę."
                     },
-                    spassword: {
-                        required: "Proszę powtórzyć hasło",
-                        equalTo: "Hasła muszą być identyczne"
+                    confirm_password: {
+                        required: "Proszę potwierdzić hasło.",
+                        minlength: "Hasło musi zawierać co najmniej 5 znaków.",
+                        equalTo: "Proszę wpisać takie samo hasło jak powyżej."
                     },
-                    "topic[]": {
-                        required: "Wybierz co najmniej 2 tematy",
-                        minlength: "Wybierz co najmniej 2 tematy"
+                    email: {
+                        required: "Proszę podać adres e-mail.",
+                        email: "Proszę podać poprawny adres e-mail.",
+                        gmail: "Adres e-mail musi być zakończony na @gmail.com."
                     },
-                    checkbox: {
-                        required: "Musisz zaakceptować politykę"
-                    }
-                },
-                errorElement: "div",
-                errorPlacement: function (error, element) {
-                    error.addClass("error");
-                    error.insertAfter(element);
+                    phone: {
+                        required: "Proszę podać numer telefonu.",
+                        phone: "Numer telefonu musi zawierać dokładnie 9 cyfr."
+                    },
+                    comment: {
+                        minLengthComment: "comment musi mieć co najmniej 30 znaków."
+                    },
+                    agree: "Proszę zaakceptować naszą politykę.",
                 }
             });
         });
     </script>
 </head>
 <body>
-    <form id="oneform" method="get" action="index.html" autocomplete="off">
+    <form id="signupForm" method="post" autocomplete="off">
         <fieldset>
-            <legend>Formularz(taki se)</legend>
-            <p>
-                <label for="firstname">Imię:</label>
-                <input id="firstname" name="name" minlength="2" type="text" required>
-            </p>
-            <p>
-                <label for="lastname">Nazwisko:</label>
-                <input id="lastname" name="lastname" type="text" required>
-            </p>
-            <p>
-                <label for="cemail">E-Mail:</label>
-                <input id="cemail" name="email" type="email" required>
-            </p>
-            <p>
-                <label for="cUrl">URL:</label>
-                <input id="cUrl" name="URL" type="url" required>
-            </p>
-            <p>
-                <label for="cpassword">Hasło:</label>
-                <input id="cpassword" name="password" type="password" required>
-            </p>
-            <p>
-                <label for="agree">Akceptuję politykę:</label>
-                <input id="agree" name="checkbox" type="checkbox" required>
-            </p>
-            <fieldset id="newsleter">
-                <legend>Tematy (co najmniej 2):</legend>
-                <label for="newtechnology">
-                    <input type="checkbox" id="newtechnology" value="Najnowsze technologie" name="topic[]"> Najnowsze technologie
-                </label>
-                <label for="computercomponents">
-                    <input type="checkbox" id="computercomponents" value="Budowa komputerów" name="topic[]"> Budowa komputerów
-                </label>
-                <label for="games">
-                    <input type="checkbox" id="games" value="Tworzenie gier" name="topic[]"> Tworzenie gier
-                </label>
-                <label for="web">
-                    <input type="checkbox" id="web" value="Tworzenie stron" name="topic[]"> Tworzenie stron
-                </label>
-            </fieldset>
-            <p>
-                <input type="submit" class="submit" value="Zarezerwuj">
-            </p>
+            <legend>Formularz rejestracyjny</legend>
+            <div class="form-group">
+                <label for="firstname">Imię</label>
+                <input id="firstname" name="firstname" type="text">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Nazwisko</label>
+                <input id="lastname" name="lastname" type="text">
+            </div>
+            <div class="form-group">
+                <label for="password">Hasło</label>
+                <input id="password" name="password" type="password">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Potwierdź hasło</label>
+                <input id="confirm_password" name="confirm_password" type="password">
+            </div>
+            <div class="form-group">
+                <label for="email">Adres e-mail</label>
+                <input id="email" name="email" type="email">
+            </div>
+            <div class="form-group">
+                <label for="phone">Numer telefonu</label>
+                <input id="phone" name="phone" type="tel">
+            </div>
+            <div class="form-group">
+                <label for="comment">Komrntarz</label>
+                <textarea id="comment" name="comment" rows="4" cols="50" placeholder="Opcjonalnie"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="agree">Zgadzam się z polityką prywatności
+                <input type="checkbox" id="agree" name="agree"></label>
+            </div>
+            <div class="form-group">
+                <input class="submit" type="submit" value="Zatwierdź">
+            </div>
         </fieldset>
     </form>
 </body>
