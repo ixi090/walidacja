@@ -74,7 +74,7 @@
     <script>
         $(document).ready(function () {
 
-            $.validator.addMethod("capitalized", function (value, element) {
+            $.validator.addMethod("Big", function (value, element) {
                 return this.optional(element) || /^[A-ZĄĆĘŁŃÓŚŻŹ][a-ząćęłńóśżź]+$/.test(value);
             }, "Pole musi zaczynać się dużą literą.");
             
@@ -103,12 +103,12 @@
                     firstname: {
                         required: true,
                         minlength: 2,
-                        capitalized: true
+                        Big: true
                     },
                     lastname: {
                         required: true,
                         minlength: 3,
-                        capitalized: true
+                        Big: true
                     },
                     password: {
                         required: true,
